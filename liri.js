@@ -5,25 +5,26 @@ var Spotify = require('node-spotify-api');
 var keys    = require("./keys.js");
 var arg     = process.argv[2];
 
+var userEntry   = [];
+
+for (var i = 3; i < process.argv.length; i++) {
+    userEntry.push(process.argv[i]);
+};
+
+var spotify = new Spotify(keys.spotify);
+
 // Case-switch for user-commands
 switch(arg) {
 
     // Uses the bandsintown API to get event information
     case 'concert-this':
 
-        var artist = [];
-
-        for (var i = 3; i < process.argv.length; i++) {
-            artist.push(process.argv[i]);
-        };
-
-        artist = artist.join("-").trim();
-        console.log(artist);
+        userEntry = userEntry.join("%20").trim();
 
         axios
             .get("https://rest.bandsintown.com/artists/"
-                + artist
-                + "/events?app_id=codingbootcamp")
+                + userEntry
+                + "/events?app_id=romv")
             
             .then(function(response) {
                 console.log(response);
@@ -40,23 +41,19 @@ switch(arg) {
     // Uses Node-Spotify-API to acquire Artist + Song information
     case 'spotify-this-song':
         
-        var spotify = Spotify(keys.Spotify);
+        userEntry = userEntry.join("%20").trim();
 
-        var song = [];
-
-        for (var i = 3; i < process.argv.length; i++) {
-            song.push(process.argv[i]);
-        };
-
-        song = song.join("-").trim();
-        console.log(song);
-
-        spotify.search({ type: 'track', query: song }, function(err, data) {
+        spotify.search({ type: 'track', query: userEntry }, function(err, data) {
             if (err) {
               return console.log('Error occurred: ' + err);
-            }
+            };
            
-            console.log(data); 
+            console.log(
+                "\nArtist: " + data.tracks.items[0].artists[0].name +
+                "\nSong: " + data.tracks.items[0].name +
+                "\nPreview: " + data.tracks.items[0].preview_url +
+                "\nAlbum: " + data.tracks.items[0].album.name
+            )
         });    
         break;
 
