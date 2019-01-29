@@ -6,9 +6,7 @@ var Spotify = require('node-spotify-api');
 var keys    = require("./keys.js");
 var arg     = process.argv[2];
 
-var userEntry   = [];
-
-console.log
+var userEntry = [];
 
 for (var i = 3; i < process.argv.length; i++) {
     userEntry.push(process.argv[i]);
@@ -18,6 +16,7 @@ var spotify = new Spotify(keys.spotify);
 
 // Case-switch for user-commands
 var mainLoop = function(arg) {
+
     switch(arg) {
 
         // Uses the bandsintown API to get event information
@@ -45,9 +44,9 @@ var mainLoop = function(arg) {
         // Uses Node-Spotify-API to acquire Artist + Song information
         case 'spotify-this-song':
             
-            if (userEntry.length != 0) {
+            if (typeof userEntry === 'array') {
                 userEntry = userEntry.join("-").trim();
-            } else {
+            } else if (userEntry.length == 0) {
                 userEntry = "The-Sign";
             };
 
