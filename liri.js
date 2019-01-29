@@ -4,6 +4,7 @@ var fs      = require('fs');
 var axios   = require("axios");
 var Spotify = require('node-spotify-api');
 var keys    = require("./keys.js");
+var moment  = require('moment');
 var arg     = process.argv[2];
 
 var userEntry = [];
@@ -30,7 +31,18 @@ var mainLoop = function(arg) {
                     + "/events?app_id=codingbootcamp")
                 
                 .then(function(response) {
-                    console.log(response.data);
+                    for (var i = 0; i < 8; i++) {
+                        console.log(
+                            "\nVenue: " 
+                                + response.data[i].venue.name +
+                            "\nLocation: " 
+                                + response.data[i].venue.city
+                                + ", " + response.data[i].venue.country +
+                            "\nDate: " 
+                                + moment(response.data[i].datetime).format("MM-DD-YYYY")
+                                + "\n"
+                        );
+                    };
                 })
 
                 .catch(function(error) {
